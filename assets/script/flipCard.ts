@@ -10,34 +10,22 @@ export class flipCard extends Component {
     count: number;
 
     protected start(): void {
-        this.flipCards(7);
-    }
-
-    flipCards(totalCards: number) {
-        this.count += (totalCards - 1) * 1000;
-        for (let i = 0; i < totalCards; i++) {
+        for (let i = 0; i < 7; i++) {
             const card = instantiate(this.cardPrefab);
-            this.cardArray.push(card);
+
             card.setPosition(-750 + i * 200, 0, 0);
-
-            let animation = card.getComponent(Animation);
             setTimeout(() => {
+                let animation = card.getComponent(Animation);
                 this.node.addChild(card);
-
                 animation.play("flip");
-            }, 1000 * i);
-        }
-
-        for (let i = totalCards - 1; i >= 0; i--) {
-            const card = this.cardArray[i];
-            let animation = card.getComponent(Animation);
-            setTimeout(() => {
-                animation.play("removeCard");
-                if (i == 0) {
-                    console.log("<0 condition occurs");
-                    this.flipCards(totalCards);
-                }
-            }, 14500 - i * 1000);
+                animation.on(
+                    Animation.EventType.FINISHED,
+                    () => {
+                        animation.play("removeCard");
+                    },
+                    this
+                );
+            }, i * 1000);
         }
     }
 
