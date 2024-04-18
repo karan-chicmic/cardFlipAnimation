@@ -44,90 +44,92 @@ export class flipCard extends Component {
             this.cardsParent.addChild(card);
         }
         // this.openCards();
-        this.startCard(0);
+        // this.startCard(0);
+        this.cardsAnimation(this.cardArray, 0, "startCard");
     }
-    openCards() {
-        this.cardArray.forEach((card) => {
-            card.getComponent(Sprite).spriteFrame = this.cardImage;
-            card.getComponent(Animation).play(Cards_Animations.Open);
-        });
-    }
+    // openCards() {
+    //     this.cardArray.forEach((card) => {
+    //         card.getComponent(Sprite).spriteFrame = this.cardImage;
+    //         card.getComponent(Animation).play(Cards_Animations.Open);
+    //     });
+    // }
 
-    closeCard(round) {
-        if (round == this.totalCards) {
-            this.startCard(0);
-            return;
-        }
-        const card = this.cardArray[round];
-        const animation = card.getComponent(Animation);
-        animation.play(Cards_Animations.Close);
-        animation.on(Animation.EventType.FINISHED, () => this.closeCard(round + 1), this, true);
-    }
+    // closeCard(round) {
+    //     if (round == this.totalCards) {
+    //         this.startCard(0);
+    //         return;
+    //     }
+    //     const card = this.cardArray[round];
+    //     const animation = card.getComponent(Animation);
+    //     animation.play(Cards_Animations.Close);
+    //     animation.on(Animation.EventType.FINISHED, () => this.closeCard(round + 1), this, true);
+    // }
 
-    flipCard(round) {
-        if (round == this.totalCards) {
-            this.closeCard(0);
-            return;
-        }
-        const card = this.cardArray[round];
-        const animation = card.getComponent(Animation);
-        animation.play(Cards_Animations.Flip);
-        animation.on(Animation.EventType.FINISHED, () => this.flipCard(round + 1), this, true);
-    }
+    // flipCard(round) {
+    //     if (round == this.totalCards) {
+    //         this.closeCard(0);
+    //         return;
+    //     }
+    //     const card = this.cardArray[round];
+    //     const animation = card.getComponent(Animation);
+    //     animation.play(Cards_Animations.Flip);
+    //     animation.on(Animation.EventType.FINISHED, () => this.flipCard(round + 1), this, true);
+    // }
 
-    startCard(round: number) {
-        if (round == this.totalCards) {
-            this.flipCard(0);
-            return;
-        }
-        const card = this.cardArray[round];
+    // startCard(round: number) {
+    //     if (round == this.totalCards) {
+    //         this.flipCard(0);
+    //         return;
+    //     }
+    //     const card = this.cardArray[round];
+    //     card.getComponent(Sprite).spriteFrame = this.cardImage;
+    //     const animation = card.getComponent(Animation);
+    //     animation.play(Cards_Animations.Open);
+    //     animation.on(Animation.EventType.FINISHED, () => this.startCard(round + 1), this, true);
+    // }
+
+    cardsAnimation(cards: Node[], count: number, operation: String) {
+        if (cards.length == 0) return;
+        const card = cards[count];
+
         card.getComponent(Sprite).spriteFrame = this.cardImage;
         const animation = card.getComponent(Animation);
-        animation.play(Cards_Animations.Open);
-        animation.on(Animation.EventType.FINISHED, () => this.startCard(round + 1), this, true);
-    }
-
-    animateCard(round: number, forward: boolean) {
-        console.log("animateCard Node", this.node); // canvas
-        console.log(round);
-        if (round < this.count) {
-            let card = instantiate(this.cardPrefab);
-            card.setPosition(-750 + round * 200, 0, 0);
-            this.node.addChild(card);
-
-            console.log(card);
-            let animation = card.getComponent(Animation);
-            animation.play("flip");
+        if (operation == "startCard") {
+            if (count == cards.length - 1) {
+                count = -1;
+                operation = "flipCard";
+            }
+            animation.play(Cards_Animations.Open);
             animation.on(
                 Animation.EventType.FINISHED,
-                () => {
-                    this.animateCard(round + 1, true);
-                },
-                this
+                () => this.cardsAnimation(cards, count + 1, operation),
+                this,
+                true
+            );
+        } else if (operation == "flipCard") {
+            if (count == cards.length - 1) {
+                count = -1;
+                operation = "closeCard";
+            }
+            animation.play(Cards_Animations.Flip);
+            animation.on(
+                Animation.EventType.FINISHED,
+                () => this.cardsAnimation(cards, count + 1, operation),
+                this,
+                true
+            );
+        } else if (operation == "closeCard") {
+            if (count == cards.length - 1) {
+                count = -1;
+                operation = "startCard";
+            }
+            animation.play(Cards_Animations.Close);
+            animation.on(
+                Animation.EventType.FINISHED,
+                () => this.cardsAnimation(cards, count + 1, operation),
+                this,
+                true
             );
         }
     }
-
-    onFlipFinished(card: Node) {
-        console.log("node", this.node);
-        console.log("onFlipFinished console", this.node);
-
-        // this.cardArray.forEach((card, index) => {
-        //     let animation = card.getComponent(Animation);
-
-        //     setTimeout(() => {
-        //         this.onFlip(animation).then(() => this.cardArray.pop());
-        //     }, index * 1000);
-        // });
-        console.log("card", card);
-        let animation = card.getComponent(Animation);
-        animation.play("removeCard");
-    }
-
-    onFlip(animation: Animation) {
-        return new Promise((resolve) => {
-            animation.play("removeCard");
-        });
-    }
-    update(deltaTime: number) {}
 }
