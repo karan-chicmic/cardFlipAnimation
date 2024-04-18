@@ -48,8 +48,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0,
+      "y": 0,
       "z": 1
     },
     "_mobility": 0,
@@ -63,7 +63,7 @@
     "_id": ""
   },
   {
-    "__type__": "cc.Animation",
+    "__type__": "cc.UITransform",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -74,43 +74,10 @@
     "__prefab": {
       "__id__": 3
     },
-    "playOnLoad": false,
-    "_clips": [
-      {
-        "__uuid__": "1348fbf3-f5ba-43a5-a31c-51a0bed8bb32",
-        "__expectedType__": "cc.AnimationClip"
-      },
-      {
-        "__uuid__": "a9472da4-dcab-4a8f-b33d-cc07c02c434e",
-        "__expectedType__": "cc.AnimationClip"
-      }
-    ],
-    "_defaultClip": {
-      "__uuid__": "1348fbf3-f5ba-43a5-a31c-51a0bed8bb32",
-      "__expectedType__": "cc.AnimationClip"
-    },
-    "_id": ""
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "c6uZGuJYtEOa8zyWYDsn4u"
-  },
-  {
-    "__type__": "cc.UITransform",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 5
-    },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 270,
-      "height": 408
+      "width": 268,
+      "height": 406
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -133,7 +100,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 7
+      "__id__": 5
     },
     "_customMaterial": null,
     "_srcBlendFactor": 2,
@@ -164,6 +131,40 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "bcuijc411DI4xvMK3XkY/l"
+  },
+  {
+    "__type__": "cc.Animation",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 7
+    },
+    "playOnLoad": false,
+    "_clips": [
+      {
+        "__uuid__": "1348fbf3-f5ba-43a5-a31c-51a0bed8bb32",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "a9472da4-dcab-4a8f-b33d-cc07c02c434e",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "6d38a1d0-e998-4a84-8ab1-0800031cec1e",
+        "__expectedType__": "cc.AnimationClip"
+      }
+    ],
+    "_defaultClip": null,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "c6uZGuJYtEOa8zyWYDsn4u"
   },
   {
     "__type__": "cc.PrefabInfo",
