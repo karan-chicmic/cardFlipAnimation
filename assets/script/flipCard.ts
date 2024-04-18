@@ -44,13 +44,41 @@ export class flipCard extends Component {
             this.cardsParent.addChild(card);
         }
         // this.openCards();
-        this.startCard(0);
+        // this.startCard(0);
+        const flipCardCb = () => {
+            this.animateCards(0, Cards_Animations.Flip, null, closeCard);
+        };
+        const openCardCB = () => {
+            this.animateCards(0, Cards_Animations.Open, this.cardImage, flipCardCb);
+        };
+        const closeCard = () => {
+            this.animateCards(0, Cards_Animations.Close, null, openCardCB);
+        };
+
+        openCardCB();
     }
     openCards() {
         this.cardArray.forEach((card) => {
             card.getComponent(Sprite).spriteFrame = this.cardImage;
             card.getComponent(Animation).play(Cards_Animations.Open);
         });
+    }
+
+    animateCards(round: number, clipname: string, backCard: SpriteFrame | null, callback: () => void) {
+        if (round == this.totalCards) {
+            callback();
+            return;
+        }
+        const card = this.cardArray[round];
+        const animation = card.getComponent(Animation);
+        backCard && (card.getComponent(Sprite).spriteFrame = this.cardImage);
+        animation.play(clipname);
+        animation.on(
+            Animation.EventType.FINISHED,
+            () => this.animateCards(round + 1, clipname, backCard, callback),
+            this,
+            true
+        );
     }
 
     closeCard(round) {
