@@ -45,91 +45,61 @@ export class flipCard extends Component {
         }
         // this.openCards();
         // this.startCard(0);
-        this.cardsAnimation(this.cardArray, 0, "startCard");
+        this.cardRecursion(this.cardArray, 0, 0);
     }
-    // openCards() {
-    //     this.cardArray.forEach((card) => {
-    //         card.getComponent(Sprite).spriteFrame = this.cardImage;
-    //         card.getComponent(Animation).play(Cards_Animations.Open);
-    //     });
-    // }
 
-    // closeCard(round) {
-    //     if (round == this.totalCards) {
-    //         this.startCard(0);
-    //         return;
-    //     }
-    //     const card = this.cardArray[round];
-    //     const animation = card.getComponent(Animation);
-    //     animation.play(Cards_Animations.Close);
-    //     animation.on(Animation.EventType.FINISHED, () => this.closeCard(round + 1), this, true);
-    // }
+    // cardsAnimation(cards: Node[], count: number, operation: string, step: number) {
+    //     switch (step) {
+    //         case 0:
+    //             operation = Cards_Animations.Open;
+    //         case 1:
+    //             operation = Cards_Animations.Flip;
 
-    // flipCard(round) {
-    //     if (round == this.totalCards) {
-    //         this.closeCard(0);
-    //         return;
+    //         case 2:
+    //             operation = Cards_Animations.Close;
     //     }
-    //     const card = this.cardArray[round];
-    //     const animation = card.getComponent(Animation);
-    //     animation.play(Cards_Animations.Flip);
-    //     animation.on(Animation.EventType.FINISHED, () => this.flipCard(round + 1), this, true);
-    // }
 
-    // startCard(round: number) {
-    //     if (round == this.totalCards) {
-    //         this.flipCard(0);
-    //         return;
-    //     }
-    //     const card = this.cardArray[round];
+    //     if (cards.length == 0) return;
+    //     const card = cards[count];
+
     //     card.getComponent(Sprite).spriteFrame = this.cardImage;
     //     const animation = card.getComponent(Animation);
-    //     animation.play(Cards_Animations.Open);
-    //     animation.on(Animation.EventType.FINISHED, () => this.startCard(round + 1), this, true);
+
+    //     if (count == cards.length - 1) {
+    //         step += step + 1;
+    //         count = 0;
+    //     }
+    //     animation.play(operation);
+
+    //     animation.on(
+    //         Animation.EventType.FINISHED,
+    //         () => this.cardsAnimation(cards, count + 1, operation, step),
+    //         this,
+    //         true
+    //     );
     // }
 
-    cardsAnimation(cards: Node[], count: number, operation: String) {
+    cardRecursion(cards: Node[], count: number, step: number) {
         if (cards.length == 0) return;
         const card = cards[count];
-
         card.getComponent(Sprite).spriteFrame = this.cardImage;
         const animation = card.getComponent(Animation);
-        if (operation == "startCard") {
-            if (count == cards.length - 1) {
-                count = -1;
-                operation = "flipCard";
-            }
-            animation.play(Cards_Animations.Open);
-            animation.on(
-                Animation.EventType.FINISHED,
-                () => this.cardsAnimation(cards, count + 1, operation),
-                this,
-                true
-            );
-        } else if (operation == "flipCard") {
-            if (count == cards.length - 1) {
-                count = -1;
-                operation = "closeCard";
-            }
-            animation.play(Cards_Animations.Flip);
-            animation.on(
-                Animation.EventType.FINISHED,
-                () => this.cardsAnimation(cards, count + 1, operation),
-                this,
-                true
-            );
-        } else if (operation == "closeCard") {
-            if (count == cards.length - 1) {
-                count = -1;
-                operation = "startCard";
-            }
-            animation.play(Cards_Animations.Close);
-            animation.on(
-                Animation.EventType.FINISHED,
-                () => this.cardsAnimation(cards, count + 1, operation),
-                this,
-                true
-            );
+        // animation.play(operation);
+        if (count == cards.length - 1) {
+            step = step + 1;
+            return;
         }
+
+        switch (step) {
+            case 0:
+                animation.play(Cards_Animations.Open);
+
+            case 1:
+                animation.play(Cards_Animations.Flip);
+
+            case 2:
+                animation.play(Cards_Animations.Close);
+        }
+        animation.on(Animation.EventType.FINISHED, () => this.cardRecursion(cards, count + 1, step), this, true);
     }
 }
