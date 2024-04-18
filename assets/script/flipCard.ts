@@ -5,49 +5,39 @@ const { ccclass, property } = _decorator;
 export class flipCard extends Component {
     @property({ type: Prefab })
     cardPrefab: Prefab;
-    // start() {
-    //     for (let i = 0; i < 7; i++) {
-    //         const card = instantiate(this.cardPrefab);
-    //         card.addComponent(Animation);
-    //         const animation = this.node.getComponent(Animation);
-    //         if (animation && animation.defaultClip) {
-    //             const { defaultClip } = animation;
-    //             defaultClip.events = [
-    //                 {
-    //                     frame: 0.5, // Triggers the event on the 0.5 second
-    //                     func: "onTriggered", // The name of the function to call when the event is triggered
-    //                     params: ["0"], // Parameters passed to `func`
-    //                 },
-    //             ];
 
-    //             animation.clips = animation.clips;
-    //         }
-
-    //         setTimeout(() => {
-    //             this.node.addChild(card);
-    //             // const animationComponent = card.addComponent(Animation);
-    //             // animationComponent.play("idle");
-    //             card.setPosition(-750 + i * 200, 0, 0);
-    //         }, 1000 * i);
-    //     }
-    // }
+    cardArray: Node[] | Node[] = [];
+    count: number;
 
     protected start(): void {
         this.flipCards(7);
     }
 
     flipCards(totalCards: number) {
+        this.count += (totalCards - 1) * 1000;
         for (let i = 0; i < totalCards; i++) {
             const card = instantiate(this.cardPrefab);
-            console.log("before animation", card);
+            this.cardArray.push(card);
             card.setPosition(-750 + i * 200, 0, 0);
 
+            let animation = card.getComponent(Animation);
             setTimeout(() => {
                 this.node.addChild(card);
 
-                let animation = card.getComponent(Animation);
-                animation.play();
+                animation.play("flip");
             }, 1000 * i);
+        }
+
+        for (let i = totalCards - 1; i >= 0; i--) {
+            const card = this.cardArray[i];
+            let animation = card.getComponent(Animation);
+            setTimeout(() => {
+                animation.play("removeCard");
+                if (i == 0) {
+                    console.log("<0 condition occurs");
+                    this.flipCards(totalCards);
+                }
+            }, 14500 - i * 1000);
         }
     }
 
